@@ -1,15 +1,15 @@
 %compare the perfect pair assignment and unique pair assignment with 
 % the lower bound of  inverse of the cond number
-N=20; % the number of sensors
-M=8; % the number of targets
+N=2; % the number of sensors
+M=1; % the number of targets
 uo_max=1; % maximum motion ability for the target
 
 pr=zeros(N,2); % the position of sensor
 pt=zeros(M,2); % position of  target
 pr(:,1)=100.*rand(N,1);
 pr(:,2)=100.*rand(N,1);
-pt(:,1)=200.*rand(M,1);
-pt(:,2)=200.*rand(M,1);
+pt(:,1)=100.*rand(M,1);
+pt(:,2)=100.*rand(M,1);
 
 low_invcond=invercond(pr,pt,uo_max,length(pr),length(pt));
 % perfect assignment
