@@ -24,7 +24,7 @@ invcondb=min(svd([AO;CO]))/sqrt(max(svd([AO;CO]))^2+uo_max^2);
 invcondc=min(svd([BO;CO]))/sqrt(max(svd([BO;CO]))^2+uo_max^2);
 %sc = svds([BO;CO],2);
 invcondd=min(svd([AO;BO;CO]))/sqrt(max(svd([AO;BO;CO]))^2+uo_max^2);
-invconde=min(svd([AO;BO;CO;DO]))/sqrt(max(svd([AO;BO;CO;DO]))^2+uo_max^2);
+%invconde=min(svd([AO;BO;CO;DO]))/sqrt(max(svd([AO;BO;CO;DO]))^2+uo_max^2);
 %sd = svds([AO;BO;CO],2);
 %error=invcondd-max([invconda invcondb invcondc]);
 %%
