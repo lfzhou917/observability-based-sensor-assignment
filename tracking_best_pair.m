@@ -4,10 +4,10 @@ global u_max
 %global tarx_true tary_true
 
 
-u_max=0.1; % for game %0.5 escape 2 2
-%u_max=3; % for circle
+%u_max=0.1; % for game %0.5 escape 2 2
+u_max=3; % for circle
 N=6; %the number of sensor agents 
-max_step=300; % loop time 315
+max_step=315; % loop time 315
 
 % the states (px, py) of N sensor robots
 % px=zeros(N,1);
@@ -39,16 +39,16 @@ id_ne=zeros(N,1);
 % true postion of target
 tarx_true=zeros(1,max_step);
 tary_true=zeros(1,max_step); 
- tarx_true(1,1)=2; %4 4
- tary_true(1,1)=2; %for game 2,1 2, 3 -2 3 -1 4 -2 7
-% tarx_true(1,1)=5;
-% tary_true(1,1)=3;% for circle
+%  tarx_true(1,1)=2; %4 4
+%  tary_true(1,1)=2; %for game 2,1 2, 3 -2 3 -1 4 -2 7
+ tarx_true(1,1)=5;
+ tary_true(1,1)=3;% for circle
 
 %estimation of the target
 tarx_hat=zeros(N,max_step);
 tary_hat=zeros(N,max_step);
-tarx_hat(1,1)=2.5; %%3.5 3.5
-tary_hat(1,1)=1.5;
+tarx_hat(1,1)=5.5; %%3.5 3.5
+tary_hat(1,1)=3.5;
 
 %the covariance funciton 
 Sigma_hat=zeros(2*N,2*max_step);
@@ -68,7 +68,7 @@ co_trace=zeros(1,max_step);
 es_err=zeros(1,max_step);
 
 %Set up the movie.
-writerObj = VideoWriter('target_entrap.avi'); % Name it.
+writerObj = VideoWriter('best_pair.avi'); % Name it.
 writerObj.FrameRate = 5; % How many frames per second.
 open(writerObj); 
 
@@ -90,10 +90,10 @@ for k=1:max_step
 %        tarx_true(1,k),tary_true(1,k), tarx_hat(1,k), tary_hat(1,k), Sigma_hat(1:2,(2*k-1): 2*k),...
 %        [px(id);px(pair_id(1,k))], [py(id);py(pair_id(1,k))], [id;pair_id(1,k)], k);
     
-        % GAME: once target knows the pair, it will escape
-        [tarx_true(1,k+1),tary_true(1,k+1), ux_op(1,k),uy_op(1,k),inv_cond_tar(1,k)]=target_escape_game(...
-            px(pair_id(k,1)),py(pair_id(k,1)),...
-            px(pair_id(k,2)),py(pair_id(k,2)),tarx_true(1,k),tary_true(1,k));
+%         % GAME: once target knows the pair, it will escape
+%         [tarx_true(1,k+1),tary_true(1,k+1), ux_op(1,k),uy_op(1,k),inv_cond_tar(1,k)]=target_escape_game(...
+%             px(pair_id(k,1)),py(pair_id(k,1)),...
+%             px(pair_id(k,2)),py(pair_id(k,2)),tarx_true(1,k),tary_true(1,k));
 
           
  
@@ -114,7 +114,7 @@ for k=1:max_step
 %     [tarx_hat(1,k+1), tary_hat(1,k+1), Sigma_hat(1:2, (2*(k+1)-1):(2*(k+1))), tarxtrue(1,k), tarytrue(1,k)] = KF (...
 %     tarx_hat(1,k), tary_hat(1,k), Sigma_hat(1:2,(2*k-1): 2*k), px(id), py(id), id, k);   
 
-    %       [tarx_true(k+1), tary_true(k+1)]=target_motion(tarx_true(1,1), tary_true(1,1), k);
+           [tarx_true(k+1), tary_true(k+1)]=target_motion(tarx_true(1,1), tary_true(1,1), k);
        
            %normf_co(1,k)=norm(Sigma_hat(1:2,(2*k-1): 2*k),'fro');
            co_trace(1,k)=trace(Sigma_hat(1:2,(2*k-1): 2*(k))); %trace(Sigma_hat(1:2,(2*k+1): 2*(k+1)));
@@ -123,33 +123,34 @@ for k=1:max_step
            es_err(1,k)=sqrt((tarx_hat(1,k)-tarx_true(1,k))^2+(tary_hat(1,k)-tary_true(1,k))^2);
 
            figure(1); clf; 
-           title('Target is entrapped by sensors','fontsize',14)
+           title('Flexible Best Pair','fontsize',14)
            %title('Best pairing for fixed sensor s_2','fontsize',14)
-           xlabel({'$$x$$'},'Interpreter','latex','fontsize',14)
-           ylabel({'$$y$$'},'Interpreter','latex','fontsize',14)         
+           xlabel({'$$x$$'},'Interpreter','latex','fontsize',16)
+           ylabel({'$$y$$'},'Interpreter','latex','fontsize',16)         
            axis equal; box on; hold on;
            xlim([-4 6]);
            ylim([-2 8]);
 %        xlim([-7 10]);
 %        ylim([-6 12]);
            h(1) = covarianceEllipse([tarx_hat(1,k);tary_hat(1,k)],Sigma_hat(1:2,(2*k-1):2*k),[1 0 0],11.82);
-           h(2)=plot(tarx_hat(1,k),tary_hat(1,k),'rs','MarkerSize',8);
+           h(2)=plot(tarx_hat(1,k),tary_hat(1,k),'rs','MarkerSize',12,'MarkerFaceColor','r');
            %h(3)=plot(tarx_hat(1,1:k),tary_hat(1,1:k), 'r-');
-           h(4)=plot(tarx_true(1,k),tary_true(1,k),'bp','MarkerSize',8);
-           h(6)=plot(tarx_true(1,1:k),tary_true(1,1:k),'b-');
+           h(4)=plot(tarx_true(1,k),tary_true(1,k),'bp','MarkerSize',12);
+           h(6)=plot(tarx_true(1,1:k),tary_true(1,1:k),'b:','LineWidth',2);
            %(5)=quiver(tarx_true(1,k),tary_true(1,k),ux_op(1,k),uy_op(1,k));
-           h(7)=plot(px,py,'kd','MarkerSize',8);
+           h(7)=plot(px,py,'kd','MarkerSize',12);
 %            txt1 = 's_1';
 %            text(-3,2.5,txt1)
 %            txt1 = 's_2';
 %            text(-0.5,0,txt1)
 %             h(8)=plot ([px(id) tarx_hat(1,k)], [py(id) tary_hat(1,k)],':');
 %             h(9)=plot ([px(pair_id(1,k)) tarx_hat(1,k)], [py(pair_id(1,k)) tary_hat(1,k)],':');
-          h(8)=plot ([px(pair_id(k,1)) tarx_hat(1,k)], [py(pair_id(k,1)) tary_hat(1,k)],':');
-          h(9)=plot ([px(pair_id(k,2)) tarx_hat(1,k)], [py(pair_id(k,2)) tary_hat(1,k)],':');
+          h(8)=plot ([px(pair_id(k,1)) tarx_hat(1,k)], [py(pair_id(k,1)) tary_hat(1,k)],'r-','LineWidth',2);
+          h(9)=plot ([px(pair_id(k,2)) tarx_hat(1,k)], [py(pair_id(k,2)) tary_hat(1,k)],'r-','LineWidth',2);
  %          h(9)=plot ([px(1) tarx_hat(1,k)], [py(1) tary_hat(1,k)],':');
            legend('Target Covariance','Target Estimate Mean','True Target','True Target Trajectory','Sensor','Location','northwest');
            pause(0.01);
+           
 
 %            figure(2); clf; 
 %            axis equal; box on; hold on;

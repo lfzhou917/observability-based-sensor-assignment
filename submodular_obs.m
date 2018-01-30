@@ -39,3 +39,4 @@ for k=1:N % the maximum timestep to update the table
         sensor_assignto_target_index(col_max(1),k)=row_max(1); % for selected target, keep its selected sensor       
 end
         num_sensor_targeti=   length(find(sensor_assignto_target_index(1,:)));
+        

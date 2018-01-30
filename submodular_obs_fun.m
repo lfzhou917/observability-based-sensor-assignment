@@ -8,7 +8,7 @@
 % pr(:,2)=100.*rand(N,1);
 % pt(:,1)=100.*rand(M,1);
 % pt(:,2)=100.*rand(M,1);
-function [num_sensor_targeti] = submodular_obs_fun(N,M,pr,pt)
+function [sensor_assignto_target_index, num_sensor_targeti] = submodular_obs_fun(N,M,pr,pt)
     sensor_selected=[]; % define a set for the sensors have been selected
     for j = 1 : M
         obs_sensor_target{j} = [];
@@ -38,4 +38,5 @@ function [num_sensor_targeti] = submodular_obs_fun(N,M,pr,pt)
             sensor_assignto_target_index(col_max(1),k)=row_max(1); % for selected target, keep its selected sensor       
     end
           num_sensor_targeti = length(find(sensor_assignto_target_index(1,:)));
+          %sensor_assignto_target_index give us 
 end

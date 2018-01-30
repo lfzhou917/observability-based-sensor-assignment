@@ -12,7 +12,7 @@ for M = min_num_targets : max_num_targets % start from 1 target to 30 targets
             pt(:,1)=100.*rand(M,1);
             pt(:,2)=100.*rand(M,1);
             cla;
-            [perfect_value(i,M),unique_value(i,M)] = compare_perfect_unique_fun(M,uo_max,pr,pt);
+            [perfect_value(i,M),unique_value(i,M),~] = compare_perfect_unique_fun(M,uo_max,pr,pt);
      end
 end
 for M = min_num_targets : max_num_targets
